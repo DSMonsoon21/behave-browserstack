@@ -3,6 +3,7 @@ from selenium.webdriver.common.by import By
 
 @when('visit url "{url}"')
 def step(context, url):
+    print("IN TEST4")
     context.browser.get(url)
     time.sleep(2)
     
