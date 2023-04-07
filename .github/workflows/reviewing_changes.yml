@@ -5,16 +5,17 @@ name: Behave Test workflow for Python on comment RUN_TESTS
 
 on:
   pull_request:
-  workflow_dispatch:
-    inputs:
-      pull_request_number:
-        description: ‘The pull request number’
-        required: true
-    permissions:
-      users:
-        - kamal-kaur04
-      teams:
-        - asi-devs
+    branches: [ master ]
+  # workflow_dispatch:
+  #   inputs:
+  #     pull_request_number:
+  #       description: ‘The pull request number’
+  #       required: true
+  #   permissions:
+  #     users:
+  #       - kamal-kaur04
+  #     teams:
+  #       - asi-devs
 
 jobs:
   build:
@@ -49,8 +50,8 @@ jobs:
       #       }
 
       - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.inputs.pull_request_number }}
+        # with:
+        #   ref: ${{ github.event.inputs.pull_request_number }}
 
       - name: Setup python
         uses: actions/setup-python@v4
