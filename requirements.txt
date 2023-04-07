@@ -1,5 +1,6 @@
 behave
 browserstack-local
-selenium
+paver
+selenium==3.141.0
 psutil
 browserstack-sdk

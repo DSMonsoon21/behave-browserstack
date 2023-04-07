@@ -6,7 +6,9 @@ def before_feature(context, feature):
     }
     context.browser = webdriver.Remote(
         desired_capabilities=desired_capabilities,
-        command_executor="http://localhost:4444/wd/hub"
+        command_executor="https://%s:%s@hub.browserstack.com/wd/hub" % (BROWSERSTACK_USERNAME, BROWSERSTACK_ACCESS_KEY),
+        keep_alive=True
+
     )
 
 def after_feature(context, feature):
