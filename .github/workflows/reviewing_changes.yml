@@ -44,7 +44,10 @@ jobs:
               repo: context.repo,
               name: 'status-check',
               head_sha: commit_sha,
-              status: 'in_progress'
+              status: 'in_progress',
+              headers: {
+                ‘X-GitHub-Api-Version’: ‘2022-11-28’
+              }
             }).catch((err) => ({status: err.status, response: err.response}));
             console.log(`The status-check response : ${result.status} Response : ${JSON.stringify(result.response)}`)
             if (result.status !== 201) {
@@ -101,7 +104,10 @@ jobs:
             name: 'status-check',
             head_sha: commit_sha,
             status: 'completed',
-            conclusion: job.status
+            conclusion: job.status,
+            headers: {
+              ‘X-GitHub-Api-Version’: ‘2022-11-28’
+            }
             }).catch((err) => ({status: err.status, response: err.response}));
             console.log(`The status-check response : ${result.status} Response : ${JSON.stringify(result.response)}`)
             if (result.status !== 201) {
