@@ -10,6 +10,7 @@ python3 should be installed
 ```
 
 ## Setup
+
 * Clone the repo 
   ```
   git clone -b sdk https://github.com/browserstack/behave-browserstack.git
