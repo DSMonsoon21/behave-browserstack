@@ -5,6 +5,7 @@ from selenium.webdriver.common.by import By
 def step(context, url):
     context.browser.get(url)
     time.sleep(2)
+    print("IN TEST3")
     
 @when("item with xpath '{selector}' is present to be added to cart")
 def step(context, selector):
