@@ -41,7 +41,7 @@ jobs:
             const commit_sha = github.sha
             const result = await github.rest.checks.create({
               owner: context.repo.owner,
-              repo: context.repo,
+              repo: context.repo.repo,
               name: 'status-check',
               head_sha: commit_sha,
               status: 'in_progress',
@@ -94,17 +94,19 @@ jobs:
 
       - uses: actions/github-script@98814c53be79b1d30f795b907e553d8679345975
         id: status-check-completed
+        env: 
+          conclusion: ${{ job.status }}
         with:
           github-token: ${{ github.token }}
           script: |
             const commit_sha = github.sha
             const result = await github.rest.checks.create({
             owner: context.repo.owner,
-            repo: context.repo,
+            repo: context.repo.repo,
             name: 'status-check',
             head_sha: commit_sha,
             status: 'completed',
-            conclusion: job.status,
+            conclusion: PROCESS.env.conclusion,
             headers: {
               'X-GitHub-Api-Version': '2022-11-28'
             }
