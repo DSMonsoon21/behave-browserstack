@@ -5,7 +5,7 @@ name: Behave Test workflow for Python on comment RUN_TESTS
 
 on:
   pull_request:
-    branches: [ master ]
+    branches: [ master, sdk ]
   # workflow_dispatch:
   #   inputs:
   #     pull_request_number:
