@@ -16,6 +16,8 @@ on:
     permissions:
       users:
         - kamal-kaur04
+      teams:
+        - asi-devs
 
 jobs:
   comment-run:
