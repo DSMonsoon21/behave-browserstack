@@ -4,8 +4,8 @@
 name: Behave Test workflow for Python on comment RUN_TESTS
 
 on:
-  pull_request:
-    branches: [ master, sdk ]
+  issue_comment:
+    branches: [ sdk ]
   # workflow_dispatch:
   #   inputs:
   #     pull_request_number:
@@ -19,7 +19,7 @@ on:
 
 jobs:
   build:
-    #if: always() && github.event.issue.pull_request && contains(github.event.comment.body, 'RUN_TESTS')
+    if: always() && github.event.issue.pull_request && contains(github.event.comment.body, 'RUN_TESTS')
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
