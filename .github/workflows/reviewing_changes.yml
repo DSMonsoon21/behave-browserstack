@@ -4,7 +4,7 @@
 name: Behave Test workflow for Python on comment RUN_TESTS
 
 on:
-  pull_request:
+  issue_comment:
     branches:
       - sdk
     types: [ created ]
