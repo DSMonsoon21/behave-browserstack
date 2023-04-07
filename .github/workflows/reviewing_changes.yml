@@ -13,6 +13,9 @@ on:
       pull_request_number:
         description: ‘The pull request number’
         required: true
+    permissions:
+      users:
+        - kamal-kaur04
 
 jobs:
   comment-run:
