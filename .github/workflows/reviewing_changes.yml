@@ -58,11 +58,7 @@ jobs:
       - name: Print browserstack-sdk version
         run: browserstack-sdk --version
 
-      - name: Run single tests 
-        run: paver run single
-
-      - name: Run local tests 
-        run: paver run local
-      
-      - name: Run parallel tests 
-        run: paver run parallel
+      - name: run tests in parallel
+        run: browserstack-sdk behave features/test.feature
+      - name: run local tests in parallel
+        run: browserstack-sdk behave features/local-test.feature
