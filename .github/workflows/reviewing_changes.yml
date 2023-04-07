@@ -28,6 +28,7 @@ jobs:
         python: ['3.7', '3.10', '3.11']
         os: [ macos-latest, windows-latest, ubuntu-latest ]
     name: Behave Repo ${{ matrix.python }} - ${{ matrix.os }} Sample
+    id: Behave Repo ${{ matrix.python }} - ${{ matrix.os }} Sample
     env:
       BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
       BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
@@ -42,7 +43,7 @@ jobs:
             const result = await github.rest.checks.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              name: 'status-check',
+              name: Behave Repo ${{ matrix.python }} - ${{ matrix.os }} Sample,
               head_sha: '3a34d95a288ad0006e327bdcd1d34be02d980249',
               status: 'in_progress',
               headers: {
@@ -103,7 +104,7 @@ jobs:
             const result = await github.rest.checks.create({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            name: 'status-check',
+            name: Behave Repo ${{ matrix.python }} - ${{ matrix.os }} Sample,
             head_sha: '3a34d95a288ad0006e327bdcd1d34be02d980249',
             status: 'completed',
             conclusion: process.env.conclusion,
