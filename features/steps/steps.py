@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 @when('visit url "{url}"')
 def step(context, url):
     context.browser.get(url)
+    print("IN FORK TEST")
     time.sleep(2)
     
 @when("item with xpath '{selector}' is present to be added to cart")
