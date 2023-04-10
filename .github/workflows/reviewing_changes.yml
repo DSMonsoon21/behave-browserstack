@@ -4,22 +4,14 @@
 name: Behave Test workflow for Python on comment RUN_TESTS
 
 on:
-  issue_comment:
-    branches: [ sdk ]
   workflow_dispatch:
     inputs:
       pull_request_number:
-        description: ‘The pull request number’
+        description: 'The pull request branch to build'
         required: true
-    # permissions:
-    #   users:
-    #     - kamal-kaur04
-    #   teams:
-    #     - asi-devs
 
 jobs:
-  build:
-    #if: always() && github.event.issue.pull_request && contains(github.event.comment.body, 'RUN_TESTS')
+  comment-run:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -28,89 +20,67 @@ jobs:
         python: ['3.7', '3.10', '3.11']
         os: [ macos-latest, windows-latest, ubuntu-latest ]
     name: Behave Repo ${{ matrix.python }} - ${{ matrix.os }} Sample
-    #id: Behave Repo ${{ matrix.python }} - ${{ matrix.os }} Sample
     env:
       BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
       BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
 
     steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.inputs.pull_request_branch }}
+      - name: Fetch Commit SHA
+        run: |
+          git log -1 --format='%H'
+          echo "commit_sha=$(git log -1 --format='%H')" >> $GITHUB_ENV
+          echo "commit_sha=$(git log -1 --format='%H')" >> $env:GITHUB_ENV
       - uses: actions/github-script@98814c53be79b1d30f795b907e553d8679345975
         id: status-check-in-progress
+        env:
+          job_name: TestNG Repo ${{ matrix.Java }} - ${{ matrix.os }} Sample
         with:
           github-token: ${{ github.token }}
           script: |
-            const commit_sha = github.sha
             const result = await github.rest.checks.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              name: Behave Repo ${{ matrix.python }} - ${{ matrix.os }} Sample,
-              head_sha: '3a34d95a288ad0006e327bdcd1d34be02d980249',
-              status: 'in_progress',
-              headers: {
-                'X-GitHub-Api-Version': '2022-11-28'
-              }
+              name: process.env.job_name,
+              head_sha: process.env.commit_sha,
+              status: 'in_progress'
             }).catch((err) => ({status: err.status, response: err.response}));
             console.log(`The status-check response : ${result.status} Response : ${JSON.stringify(result.response)}`)
             if (result.status !== 201) {
               console.log('Failed to create check run')
             }
-      # - uses: actions/github-script@98814c53be79b1d30f795b907e553d8679345975
-      #   id: check-membership
-      #   with:
-      #     github-token: ${{ secrets.BROWSERSTACK_TOKEN }}
-      #     script: |
-      #       const creator = context.payload.sender.login
-      #       const result = await github.rest.teams.getMembershipForUserInOrg({
-      #         org: context.repo.owner,
-      #         team_slug: 'asi-devs',
-      #         username: creator
-      #       }).catch((err) => ({status: err.status, response: err.response}));
-      #       console.log(`The comment creator ${creator} membership Status : ${result.status} Response : ${JSON.stringify(result.response)}`)
-      #       if (result.status !== 200) {
-      #         core.setFailed('User is not part of the owner team!')
-      #       }
-
-      - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.inputs.pull_request_number }}
-
       - name: Setup python
         uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python }}
 
-      - name: Print python version
-        run: python --version
-
       - name: Install dependencies
         run: python -m pip install -r requirements.txt
 
-      - name: Print browserstack-sdk version
-        run: browserstack-sdk --version
-
       - name: run tests in parallel
         run: browserstack-sdk behave features/test.feature
+
       - name: run local tests in parallel
         run: browserstack-sdk behave features/local-test.feature
 
-      - uses: actions/github-script@98814c53be79b1d30f795b907e553d8679345975
+      - if: always()
+        uses: actions/github-script@98814c53be79b1d30f795b907e553d8679345975
         id: status-check-completed
-        env: 
+        env:
           conclusion: ${{ job.status }}
+          job_name: Behave Repo ${{ matrix.python }} - ${{ matrix.os }} Sample
         with:
           github-token: ${{ github.token }}
           script: |
-            const commit_sha = github.sha
             const result = await github.rest.checks.create({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            name: Behave Repo ${{ matrix.python }} - ${{ matrix.os }} Sample,
-            head_sha: '3a34d95a288ad0006e327bdcd1d34be02d980249',
+            name: process.env.job_name,
+            head_sha: process.env.commit_sha,
             status: 'completed',
-            conclusion: process.env.conclusion,
-            headers: {
-              'X-GitHub-Api-Version': '2022-11-28'
-            }
+            conclusion: process.env.conclusion
             }).catch((err) => ({status: err.status, response: err.response}));
             console.log(`The status-check response : ${result.status} Response : ${JSON.stringify(result.response)}`)
             if (result.status !== 201) {
