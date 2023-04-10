@@ -27,7 +27,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: ${{ github.event.inputs.pull_request_branch }}
+          ref: ${{ github.event.inputs.pulls.pull_request_branch }}
       - name: Fetch Commit SHA
         run: |
           git log -1 --format='%H'
