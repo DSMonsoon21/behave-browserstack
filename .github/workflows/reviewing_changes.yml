@@ -6,7 +6,7 @@ name: Behave Test workflow for Python on comment RUN_TESTS
 on:
   workflow_dispatch:
     inputs:
-      pull_request_number:
+      pull_request_branch:
         description: 'The pull request branch to build'
         required: true
 
